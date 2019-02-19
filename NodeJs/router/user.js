@@ -28,5 +28,27 @@ router.post("/user", (req, res) => {
   });
 });
 
+
+//user put
+router.put("/user/:id", (req, res) => {
+
+  let query = { _id: req.params.id };
+  let document = {
+    // first: req.body.firstName,
+    // last: req.body.lastName,
+    // email: req.body.email,
+    // password: req.body.password,
+    isActive: req.body.isActive
+  };
+
+  User.update(query, document, (err, respRaw) => {
+    if (err) {
+      // return res.sendStatus(500).send({ message: err });
+      return res.sendStatus(500).send({ message: err });
+    }
+    return res.status(200).json(respRaw);
+  });
+});
+
 let userRoute = { router };
 module.exports = userRoute;
