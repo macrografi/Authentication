@@ -12,7 +12,18 @@ router.get("/user/:id", (req, res) => {
     .exec()
     .then(docs => res.sendStatus(200).json({ message: docs }))
     .catch(err =>
-      res.status(500).json({ message: "Error finding user", error: err })
+      res.status(500).json({ message: "Error finding user id", error: err })
+    );
+});
+
+//find by user email
+router.get("/user/email/:email", (req, res) => {
+  let findEmail = { email: req.params.email };
+
+  User.find(findEmail)
+    .then(docs => res.status(200).json(docs))
+    .catch(err =>
+      res.status(500).json({ message: "Error finding user email", error: err })
     );
 });
 
@@ -28,10 +39,8 @@ router.post("/user", (req, res) => {
   });
 });
 
-
 //user put
 router.put("/user/:id", (req, res) => {
-
   let query = { _id: req.params.id };
   let document = {
     // first: req.body.firstName,
