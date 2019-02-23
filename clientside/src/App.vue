@@ -1,16 +1,24 @@
 <template>
+<v-container grid-list-md text-xs-center>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+
+      <router-link to="/">Home</router-link>|
+      <router-link to="/login">Login</router-link>|
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
+
   </div>
+  </v-container>
 </template>
 
 <style lang="scss">
+@import "../node_modules/vuetify/dist/vuetify.min.css";
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons");
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
