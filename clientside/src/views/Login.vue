@@ -1,36 +1,21 @@
 <template>
-  <v-container grid-list-md text-xs-center>
-    <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="600px">
-        <v-card>
-          <v-card-title>
-            <span class="headline">Login</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
-              <v-layout wrap>
-                <v-flex xs12>
-                  <v-text-field label="E-mail" v-model="email" v-bind:rules="emailRules" required></v-text-field>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field label="Password*" v-model="password" v-bind:rules="passwordRules" v-bind:type="'password'" required></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-container>
-            <small>*indicates required field</small>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat v-on:click="cancel">Cancel</v-btn>
-            <v-btn color="blue darken-1" flat v-on:click="login">Login</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-layout>
-    <v-snackbar :timeout="6000" :top="true" v-model="showAlert">{{loginError}}<v-btn flat color="pink" v-on:click="showAlert = false">Close</v-btn></v-snackbar>
-  </v-container>
+  <b-container class="bv-example-row">
+    <b-row class="justify-content-md-center text-left">
+      <b-col cols="5">
+        <h1>Login</h1>
+        <b-form-group id="exampleInputGroup1" label="e-mail" label-for="exampleInput1">
+          <b-form-input id="exampleInput1" type="email" v-model="email" v-bind:rules="emailRules" required/>
+        </b-form-group>
+        <b-form-group id="exampleInputGroup2" label="password" label-for="exampleInput2">
+          <b-form-input id="exampleInput2" type="password" v-model="password" v-bind:rules="passwordRules" required/>
+        </b-form-group>
+        <b-button type="submit" variant="primary" @click="login">Submit</b-button>
+      </b-col>
+    </b-row>
+    <v-snackbar :timeout="6000" :right="true" v-model="showAlert">{{ loginError }}<v-btn flat color="pink" v-on:click="showAlert = false">Close</v-btn></v-snackbar>
+  </b-container>
 </template>
-6
+
 <script>
 export default {
   data() {
@@ -69,9 +54,6 @@ export default {
           this.showAlert = true;
         }
       });
-    },
-    cancel: function() {
-      console.log("cancel");
     }
   }
 };

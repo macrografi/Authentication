@@ -1,16 +1,26 @@
 <template>
-<v-container grid-list-md text-xs-center>
   <div id="app">
-    <div id="nav">
-
-      <router-link to="/">Home</router-link>|
-      <router-link to="/login">Login</router-link>|
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-
+    <b-navbar toggleable="lg" type="dark" variant="dark">
+      <b-navbar-brand href="#">NavBar</b-navbar-brand>
+      <b-navbar-toggle target="nav_collapse"/>
+      <b-collapse is-nav id="nav_collapse">
+        <b-navbar-nav>
+          <b-nav-item router-link to="/">Home</b-nav-item>
+          <b-nav-item router-link to="/login">Login</b-nav-item>
+          <b-nav-item router-link to="/register">Register</b-nav-item>
+          <b-nav-item router-link to="/about">About</b-nav-item>
+          <b-nav-item-dropdown right>
+            <template slot="button-content">User</template>
+            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <b-dropdown-item href="#">Signout</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+      </b-collapse>
+    </b-navbar>
+    <b-jumbotron>
+      <router-view/>
+    </b-jumbotron>
   </div>
-  </v-container>
 </template>
 
 <style lang="scss">
