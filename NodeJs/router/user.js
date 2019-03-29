@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const jwt = require("jwt-simple");
 
 //user model
 const User = require("../model/user");
@@ -20,12 +21,33 @@ router.get("/user/:id", (req, res) => {
 router.get("/user/email/:email", (req, res) => {
   let findEmail = { email: req.params.email };
 
+  let payload = { email: req.params.email };
+
+  let key = "user111";
+  let token = jwt.encode(payload, key);
+
   User.find(findEmail)
+    // .then(docs => res.status(200).send({ token }).json(docs,{ token }))
     .then(docs => res.status(200).json(docs))
+
     .catch(err =>
       res.status(500).json({ message: "Error finding user email", error: err })
     );
 });
+
+
+//login
+router.post("/user", async (req, res) => {
+  let data = req.body;
+  let user = await User.findOne({ email: data.email, password: data.password });
+
+  if (!user) {
+    return res.status(401).send({ message: "Email or password invalid" });
+  }
+  return res.sendStatus(200);
+})
+
+
 
 //user post
 router.post("/user", (req, res) => {
