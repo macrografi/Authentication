@@ -29,26 +29,29 @@ router.get("/user/email/:email", (req, res) => {
     );
 });
 
-//login post token
+//login post send token
 router.post("/user/login", async (req, res) => {
   let data = req.body;
   let user = await User.findOne({ email: data.email, password: data.password });
-  let token = jwt.encode(data.email, data.password);
-
-  if (!user) {
+  
+  if (!user || null) {
     return res.status(401).send({ message: "Email or password invalid" });
   }
-  return res.status(200).send({token});
-})
+  else {
+    let token = await jwt.encode(data.email, data.password);
+    return res.status(200).send({ token });
+  }
+});
 
-//user post
-router.post("/user", (req, res) => {
+//user post regisater
+router.post("/user/register", (req, res) => {
   let user = new User(req.body);
+
   user.save((err, user) => {
     if (err) {
-      return res.sendStatus(500).send({ message: err });
+      return res.status(500).send({ message: err });
     }
-    return res.sendStatus(200);
+    return res.status(200);
   });
 });
 

@@ -30,9 +30,11 @@ const actions = {
       .then(resp => {
         let data = resp.data;
 
-        if (data.token) {
-          console.log(payload);
-            commit("loginEnter", payload);
+        if (data) {
+          commit("loginEnter", payload);
+        }
+        else {
+          commit("loginError", payload);
         }
       })
       .catch(() => {
@@ -43,10 +45,7 @@ const actions = {
     await Vue.axios
       .post("http://localhost:8000/user", payload)
       .then(resp => {
-
-
         if (resp.status === 200) {
-
           if (resp.statusText === "OK") {
             // console.log(resp.status,resp.statusText);
             commit("registerEnter", payload);
