@@ -21,13 +21,7 @@ router.get("/user/:id", (req, res) => {
 router.get("/user/email/:email", (req, res) => {
   let findEmail = { email: req.params.email };
 
-  let payload = { email: req.params.email };
-
-  let key = "user111";
-  let token = jwt.encode(payload, key);
-
   User.find(findEmail)
-    // .then(docs => res.status(200).send({ token }).json(docs,{ token }))
     .then(docs => res.status(200).json(docs))
 
     .catch(err =>
@@ -35,24 +29,21 @@ router.get("/user/email/:email", (req, res) => {
     );
 });
 
-
-//login
-router.post("/user", async (req, res) => {
+//login post token
+router.post("/user/login", async (req, res) => {
   let data = req.body;
   let user = await User.findOne({ email: data.email, password: data.password });
+  let token = jwt.encode(data.email, data.password);
 
   if (!user) {
     return res.status(401).send({ message: "Email or password invalid" });
   }
-  return res.sendStatus(200);
+  return res.status(200).send({token});
 })
-
-
 
 //user post
 router.post("/user", (req, res) => {
   let user = new User(req.body);
-  // console.log(user);
   user.save((err, user) => {
     if (err) {
       return res.sendStatus(500).send({ message: err });

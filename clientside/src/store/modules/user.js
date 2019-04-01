@@ -6,7 +6,7 @@ const state = {
   lastName: "",
   password: "",
   userId: null,
-  
+
   isLoggedIn: false,
   loginError: "",
 
@@ -26,18 +26,13 @@ const getters = {
 const actions = {
   async loginEnter({ commit }, payload) {
     await Vue.axios
-      .get("http://localhost:8000/user/email/" + payload.email)
+      .post("http://localhost:8000/user/login", payload)
       .then(resp => {
         let data = resp.data;
-        if (data && data.length > 0) {
-          console.log(data, data.length);
-          if (data[0].password === payload.password) {
-            payload.userId = data[0]._id;
+
+        if (data.token) {
+          console.log(payload);
             commit("loginEnter", payload);
-          } 
-          else {
-            commit("loginError", payload);
-          }
         }
       })
       .catch(() => {
@@ -51,11 +46,11 @@ const actions = {
 
 
         if (resp.status === 200) {
-          
+
           if (resp.statusText === "OK") {
             // console.log(resp.status,resp.statusText);
             commit("registerEnter", payload);
-          } 
+          }
           else {
             commit("registerError", payload);
           }
