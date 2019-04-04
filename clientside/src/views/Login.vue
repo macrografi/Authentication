@@ -82,9 +82,9 @@ export default {
     logout() {
       this.$store.dispatch("logoutEnter").then(() => {
         console.log(this.isLogout);
-        // if (this.isLogout) {
-        //   this.$router.push({ path: "/" });
-        // }
+        if (this.isLogout) {
+          this.$router.push({ path: "/" });
+        }
       });
     },
     ...mapActions(["fetchAccessToken"])
