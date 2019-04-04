@@ -6,19 +6,19 @@ const state = {
   lastName: "",
   password: "",
   userId: null,
-
   isLoggedIn: false,
   loginError: "",
-
   isRegister: false,
-  registerError: ""
+  registerError: "",
+  token: null,
+  isLogout: false
 };
 
 const getters = {
   isLoggedIn: state => state.isLoggedIn,
+  isLogout: state => state.isLogout,
   userId: state => state.userId,
   loginError: state => state.loginError,
-
   isRegister: state => state.isRegister,
   registerError: state => state.registerError
 };
@@ -31,15 +31,22 @@ const actions = {
         let data = resp.data;
 
         if (data) {
+          localStorage.setItem('token', data.token);
           commit("loginEnter", payload);
+          commit('updateAccessToken', data.token);
         }
         else {
           commit("loginError", payload);
+          commit('updateAccessToken', null);
         }
       })
       .catch(() => {
         commit("loginError", payload);
+        commit('updateAccessToken', null);
       });
+  },
+  fetchAccessToken({ commit }) {
+    commit('updateAccessToken', localStorage.getItem('token'));
   },
   async registerEnter({ commit }, payload) {
     await Vue.axios
@@ -58,6 +65,10 @@ const actions = {
       .catch(() => {
         commit("registerError", payload);
       });
+  },
+  logoutEnter({ commit }) {
+    commit("logoutEnter")
+     commit('updateAccessToken', localStorage.removeItem('token'));
   }
 };
 
@@ -67,6 +78,10 @@ const mutations = {
     state.userId = payload.userId;
     //Login true
     state.isLoggedIn = true;
+  },
+  logoutEnter(state, token){
+    state.accessToken = token;
+    state.isLogout = true;
   },
   loginError(state) {
     //login false
@@ -78,13 +93,15 @@ const mutations = {
     state.lastName = payload.lastName;
     state.password = payload.password;
     state.email = payload.email;
-
     state.isRegister = true;
-    console.log(payload);
   },
   registerError(state) {
     state.isRegister = false;
     state.registerError = "Register failed.";
+  },
+  updateAccessToken: (state, token) => {
+    state.accessToken = token;
+    // state.isLogout = true;
   }
 };
 
