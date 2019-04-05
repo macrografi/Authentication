@@ -20,7 +20,9 @@ const getters = {
   userId: state => state.userId,
   loginError: state => state.loginError,
   isRegister: state => state.isRegister,
-  registerError: state => state.registerError
+  registerError: state => state.registerError,
+
+  token: state => state.token
 };
 
 const actions = {
@@ -32,17 +34,20 @@ const actions = {
 
         if (data) {
           localStorage.setItem('token', data.token);
-          commit("loginEnter", payload);
           commit('updateAccessToken', data.token);
+          commit("loginEnter", payload);
+
         }
         else {
-          commit("loginError", payload);
           commit('updateAccessToken', null);
+          commit("loginError", payload);
+
         }
       })
       .catch(() => {
-        commit("loginError", payload);
         commit('updateAccessToken', null);
+        commit("loginError", payload);
+
       });
   },
   fetchAccessToken({ commit }) {
@@ -54,7 +59,6 @@ const actions = {
       .then(resp => {
         if (resp.status === 200) {
           if (resp.statusText === "OK") {
-            // console.log(resp.status,resp.statusText);
             commit("registerEnter", payload);
           }
           else {
@@ -67,8 +71,8 @@ const actions = {
       });
   },
   logoutEnter({ commit }) {
-    commit("logoutEnter")
-     commit('updateAccessToken', localStorage.removeItem('token'));
+    commit('updateAccessToken', localStorage.removeItem('token'));
+    commit("logoutEnter");
   }
 };
 
@@ -76,15 +80,14 @@ const mutations = {
   loginEnter(state, payload) {
     state.email = payload.email;
     state.userId = payload.userId;
-    //Login true
     state.isLoggedIn = true;
   },
-  logoutEnter(state, token){
-    state.accessToken = token;
+  logoutEnter(state, token) {
+    state.token = token;
+    state.isLoggedIn = false;
     state.isLogout = true;
   },
   loginError(state) {
-    //login false
     state.isLoggedIn = false;
     state.loginError = "Email and/or Password are invalid. Login failed.";
   },
@@ -100,8 +103,7 @@ const mutations = {
     state.registerError = "Register failed.";
   },
   updateAccessToken: (state, token) => {
-    state.accessToken = token;
-    // state.isLogout = true;
+    state.token = token;
   }
 };
 

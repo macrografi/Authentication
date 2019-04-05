@@ -22,8 +22,6 @@
           />
         </b-form-group>
         <b-button type="submit" variant="primary" @click="login">Login</b-button>
-
-        <b-button type="submit" variant="primary" @click="logout">Logout</b-button>
       </b-col>
     </b-row>
     <v-snackbar :timeout="6000" :right="true" v-model="showAlert">
@@ -59,9 +57,6 @@ export default {
     },
     loginError() {
       return this.$store.getters.loginError;
-    },
-    isLogout() {
-      return this.$store.getters.isLogout;
     }
   },
   methods: {
@@ -81,7 +76,6 @@ export default {
     },
     logout() {
       this.$store.dispatch("logoutEnter").then(() => {
-        console.log(this.isLogout);
         if (this.isLogout) {
           this.$router.push({ path: "/" });
         }
