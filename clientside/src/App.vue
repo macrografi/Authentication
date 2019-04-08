@@ -39,7 +39,11 @@ export default {
           this.$router.push({ path: "/" });
         }
       });
-    }
+    },
+    ...mapActions(["fetchAccessToken"])
+  },
+  created() {
+    this.fetchAccessToken();
   }
 };
 </script>
