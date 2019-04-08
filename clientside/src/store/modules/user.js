@@ -10,18 +10,15 @@ const state = {
   loginError: "",
   isRegister: false,
   registerError: "",
-  token: null,
-  isLogout: false
+  token: null
 };
 
 const getters = {
   isLoggedIn: state => state.isLoggedIn,
-  isLogout: state => state.isLogout,
   userId: state => state.userId,
   loginError: state => state.loginError,
   isRegister: state => state.isRegister,
   registerError: state => state.registerError,
-
   token: state => state.token
 };
 
@@ -36,12 +33,10 @@ const actions = {
           localStorage.setItem('token', data.token);
           commit('updateAccessToken', data.token);
           commit("loginEnter", payload);
-
         }
         else {
           commit('updateAccessToken', null);
           commit("loginError", payload);
-
         }
       })
       .catch(() => {
@@ -83,9 +78,8 @@ const mutations = {
     state.isLoggedIn = true;
   },
   logoutEnter(state, token) {
-    state.token = token;
+    state.token = null;
     state.isLoggedIn = false;
-    state.isLogout = true;
   },
   loginError(state) {
     state.isLoggedIn = false;
@@ -102,7 +96,8 @@ const mutations = {
     state.isRegister = false;
     state.registerError = "Register failed.";
   },
-  updateAccessToken: (state, token) => {
+  updateAccessToken(state, token) {
+    state.isLoggedIn = true;
     state.token = token;
   }
 };

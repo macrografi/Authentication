@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   data() {
     return {
@@ -73,18 +71,7 @@ export default {
           this.showAlert = true;
         }
       });
-    },
-    logout() {
-      this.$store.dispatch("logoutEnter").then(() => {
-        if (this.isLogout) {
-          this.$router.push({ path: "/" });
-        }
-      });
-    },
-    ...mapActions(["fetchAccessToken"])
-  },
-  created() {
-    this.fetchAccessToken();
+    }
   }
 };
 </script>

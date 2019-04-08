@@ -9,7 +9,6 @@
           <b-nav-item router-link to="/login">Login</b-nav-item>
           <b-nav-item router-link to="/register">Register</b-nav-item>
           <b-nav-item router-link to="/about">About</b-nav-item>
-          {{isLoggedIn}}
           <b-nav-item-dropdown right>
             <template slot="button-content">User</template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
@@ -28,17 +27,10 @@
 import { mapActions } from "vuex";
 
 export default {
-  data() {
-    return {
-      isLoggedIn: false
-    };
-  },
-
   computed: {
     isLogout() {
       return this.$store.getters.isLogout;
-    },
-    ...mapActions(["fetchAccessToken"])
+    }
   },
   methods: {
     logout() {
@@ -47,16 +39,7 @@ export default {
           this.$router.push({ path: "/" });
         }
       });
-    },
-    init() {
-      console.log(this.$store.getters.isLoggedIn);
-      return {
-        isLoggedIn: this.$store.getters.isLoggedIn
-      };
     }
-  },
-  mounted(){
-    this.init();
   }
 };
 </script>
