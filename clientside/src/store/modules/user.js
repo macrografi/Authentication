@@ -31,18 +31,16 @@ const actions = {
 
         if (data) {
           localStorage.setItem('token', data.token);
+          
           commit('updateAccessToken', data.token);
           commit("loginEnter", payload);
         }
         else {
-          commit('updateAccessToken', null);
           commit("loginError", payload);
         }
       })
       .catch(() => {
-        commit('updateAccessToken', null);
         commit("loginError", payload);
-
       });
   },
   fetchAccessToken({ commit }) {
@@ -77,7 +75,7 @@ const mutations = {
     state.userId = payload.userId;
     state.isLoggedIn = true;
   },
-  logoutEnter(state, token) {
+  logoutEnter(state) {
     state.token = null;
     state.isLoggedIn = false;
   },
