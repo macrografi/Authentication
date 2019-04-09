@@ -49,9 +49,9 @@ router.post("/user/register", (req, res) => {
 
   user.save((err, user) => {
     if (err) {
-      return res.status(500).send({ message: err });
+      return res.sendStatus(500).send({ message: err });
     }
-    return res.status(200);
+    return res.sendStatus(200);
   });
 });
 

@@ -3,14 +3,22 @@
     <b-navbar toggleable="lg" type="dark" variant="dark">
       <b-navbar-brand href="#">Auth.</b-navbar-brand>
       <b-navbar-toggle target="nav_collapse"/>
+
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item router-link to="/">Home</b-nav-item>
-          <b-nav-item router-link to="/login">Login</b-nav-item>
-          <b-nav-item router-link to="/register">Register</b-nav-item>
           <b-nav-item router-link to="/about">About</b-nav-item>
-          <b-nav-item-dropdown right>
-            <template slot="button-content">User</template>
+
+          <b-nav-item v-if="!isLogin" router-link to="/login">
+            <i class="material-icons md-18 orange600">person</i>
+            Login
+          </b-nav-item>
+          <b-nav-item v-if="!isLogin" router-link to="/register">
+            <i class="material-icons md-18 orange600">person_add</i>
+            Register
+          </b-nav-item>
+          <b-nav-item-dropdown v-if="isLogin" right>
+            <template slot="button-content">Welcome User</template>
             <b-dropdown-item href="#">Profile</b-dropdown-item>
             <b-dropdown-item href="#" @click="logout">Signout</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -20,9 +28,10 @@
     <b-jumbotron>
       <router-view/>
     </b-jumbotron>
+
+    <p>Login bool: "{{ isLogin }}"</p>
   </div>
 </template>
-
 <script>
 import { mapActions } from "vuex";
 
@@ -30,6 +39,9 @@ export default {
   computed: {
     isLogout() {
       return this.$store.getters.isLogout;
+    },
+    isLogin() {
+      return this.$store.getters.isLoggedIn;
     }
   },
   methods: {

@@ -31,7 +31,7 @@ const actions = {
 
         if (data) {
           localStorage.setItem('token', data.token);
-          
+
           commit('updateAccessToken', data.token);
           commit("loginEnter", payload);
         }
@@ -48,8 +48,9 @@ const actions = {
   },
   async registerEnter({ commit }, payload) {
     await Vue.axios
-      .post("http://localhost:8000/user", payload)
+      .post("http://localhost:8000/user/register", payload)
       .then(resp => {
+        console.log(resp);
         if (resp.status === 200) {
           if (resp.statusText === "OK") {
             commit("registerEnter", payload);
@@ -73,7 +74,7 @@ const mutations = {
   loginEnter(state, payload) {
     state.email = payload.email;
     state.userId = payload.userId;
-    state.isLoggedIn = true;
+    // state.isLoggedIn = true;
   },
   logoutEnter(state) {
     state.token = null;
@@ -84,6 +85,7 @@ const mutations = {
     state.loginError = "Email and/or Password are invalid. Login failed.";
   },
   registerEnter(state, payload) {
+
     state.firstName = payload.firstName;
     state.lastName = payload.lastName;
     state.password = payload.password;
@@ -95,8 +97,11 @@ const mutations = {
     state.registerError = "Register failed.";
   },
   updateAccessToken(state, token) {
-    state.isLoggedIn = true;
     state.token = token;
+    
+    if (token) {
+      state.isLoggedIn = true;
+    }
   }
 };
 
