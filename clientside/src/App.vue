@@ -10,12 +10,16 @@
           <b-nav-item router-link to="/about">About</b-nav-item>
 
           <b-nav-item v-if="!isLogin" router-link to="/login">
-            <i class="material-icons md-18 orange600">person</i>
-            Login
+            <span class="clearfix">
+              <i class="material-icons">face</i>
+            </span>
+            <span>Login</span>
           </b-nav-item>
           <b-nav-item v-if="!isLogin" router-link to="/register">
-            <i class="material-icons md-18 orange600">person_add</i>
-            Register
+            <span class="clearfix">
+              <i class="material-icons">add_circle_outline</i>
+            </span>
+            <span>Register</span>
           </b-nav-item>
           <b-nav-item-dropdown v-if="isLogin" right>
             <template slot="button-content">Welcome User</template>
@@ -81,4 +85,5 @@ export default {
     }
   }
 }
+.nav-link span{float:left; padding: 0 0 0 5px;}
 </style>
