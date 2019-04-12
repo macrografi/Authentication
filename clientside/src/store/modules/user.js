@@ -10,7 +10,8 @@ const state = {
   loginError: "",
   isRegister: false,
   registerError: "",
-  token: null
+  token: null,
+  updateData: {}
 };
 
 const getters = {
@@ -21,7 +22,8 @@ const getters = {
   loginError: state => state.loginError,
   isRegister: state => state.isRegister,
   registerError: state => state.registerError,
-  token: state => state.token
+  token: state => state.token,
+  updateData: state => state.updateData
 };
 
 const actions = {
@@ -30,19 +32,16 @@ const actions = {
       .post("http://localhost:8000/user/login", payload)
       .then(resp => {
         let data = resp.data;
+
         if (data) {
           localStorage.setItem('token', data.token);
-
           commit('updateAccessToken', data.token);
-          commit("loginEnter", payload);
 
           Vue.axios
             .get("http://localhost:8000/user/email/user1@test.com", data.email)
             .then(
               resp => {
                 let data = resp.data;
-                console.log(data);
-
                 commit("updateUserinfo", data);
               }
             )
@@ -82,16 +81,13 @@ const actions = {
   fetchAccessToken({ commit }) {
     commit('updateAccessToken', localStorage.getItem('token'));
   }
-  // ,
-  // async updateUserinfo({ commit }) {
-  // }
+  ,
+  async updateUserinfo({ commit }) {
+    commit('updateUserinfo');
+  }
 };
 
 const mutations = {
-  loginEnter(state, payload) {
-    state.email = payload.email;
-    state.userId = payload.userId;
-  },
   logoutEnter(state) {
     state.token = null;
     state.isLoggedIn = false;
@@ -111,18 +107,20 @@ const mutations = {
   },
   updateAccessToken(state, token) {
     state.token = token;
-
     if (token) {
       state.isLoggedIn = true;
     }
   },
   updateUserinfo(state, data) {
     let updateData = data[0];
-    
-    state.firstName = updateData.firstName;
-    state.lastName = updateData.lastName;
-    state.password = updateData.password;
-    state.email = updateData.email;
+
+    state.updateData = {
+      firstName: updateData.firstName,
+      lastName: updateData.lastName,
+      password: updateData.password,
+      email: updateData.email,
+      userId: updateData._id
+    }
   }
 };
 

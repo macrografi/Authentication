@@ -20,7 +20,7 @@
             <span>Register</span>
           </b-nav-item>
           <b-nav-item-dropdown v-if="isLogin" right>
-            <template slot="button-content">Welcome {{autName}}</template>
+            <template slot="button-content">Welcome {{userName}}</template>
             <b-dropdown-item router-link to="/profile">Profile</b-dropdown-item>
             <b-dropdown-item href="#" @click="logout">Signout</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -45,9 +45,9 @@ export default {
     isLogin() {
       return this.$store.getters.isLoggedIn;
     },
-    autName(){
+    userName(){
       // return this.$store.getters.firstName;
-      return this.$store.getters.email;
+      return this.$store.getters.firstName;
     }
   },
   methods: {
