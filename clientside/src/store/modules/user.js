@@ -64,9 +64,21 @@ const actions = {
         commit("registerError", payload);
       });
   },
-  logoutEnter({ commit }) {
-    commit('updateAccessToken', localStorage.removeItem('token'));
-    commit("logoutEnter");
+  fetchAccessToken({ commit }) {
+    commit('updateAccessToken', localStorage.getItem('token'));
+  },
+  async updateUserinfo({ commit }) {
+    await Vue.axios.get("http://localhost:8000/user/5c9cc86354d07819bcae6a42").then(resp => {
+      let data = resp.data;
+
+      if (resp.statusText === "OK") {
+        console.log(data);
+        commit("updateUserinfo", data);
+      }
+    }).catch(() => {
+      console.log("FAIL!!!")
+    }
+    );
   }
 };
 
