@@ -14,6 +14,8 @@ const state = {
 };
 
 const getters = {
+  email: state => state.email,
+  firstName: state => state.firstName,
   isLoggedIn: state => state.isLoggedIn,
   userId: state => state.userId,
   loginError: state => state.loginError,
@@ -28,12 +30,25 @@ const actions = {
       .post("http://localhost:8000/user/login", payload)
       .then(resp => {
         let data = resp.data;
-
         if (data) {
           localStorage.setItem('token', data.token);
 
           commit('updateAccessToken', data.token);
           commit("loginEnter", payload);
+
+          Vue.axios
+            .get("http://localhost:8000/user/email/user1@test.com", data.email)
+            .then(
+              resp => {
+                let data = resp.data;
+                console.log(data);
+
+                commit("updateUserinfo", data);
+              }
+            )
+            .catch(() => {
+              commit("loginError", payload);
+            });
         }
         else {
           commit("loginError", payload);
@@ -43,14 +58,14 @@ const actions = {
         commit("loginError", payload);
       });
   },
-  fetchAccessToken({ commit }) {
-    commit('updateAccessToken', localStorage.getItem('token'));
+  logoutEnter({ commit }) {
+    commit('updateAccessToken', localStorage.removeItem('token'));
+    commit("logoutEnter");
   },
   async registerEnter({ commit }, payload) {
     await Vue.axios
       .post("http://localhost:8000/user/register", payload)
       .then(resp => {
-        console.log(resp);
         if (resp.status === 200) {
           if (resp.statusText === "OK") {
             commit("registerEnter", payload);
@@ -66,27 +81,16 @@ const actions = {
   },
   fetchAccessToken({ commit }) {
     commit('updateAccessToken', localStorage.getItem('token'));
-  },
-  async updateUserinfo({ commit }) {
-    await Vue.axios.get("http://localhost:8000/user/5c9cc86354d07819bcae6a42").then(resp => {
-      let data = resp.data;
-
-      if (resp.statusText === "OK") {
-        console.log(data);
-        commit("updateUserinfo", data);
-      }
-    }).catch(() => {
-      console.log("FAIL!!!")
-    }
-    );
   }
+  // ,
+  // async updateUserinfo({ commit }) {
+  // }
 };
 
 const mutations = {
   loginEnter(state, payload) {
     state.email = payload.email;
     state.userId = payload.userId;
-    // state.isLoggedIn = true;
   },
   logoutEnter(state) {
     state.token = null;
@@ -97,11 +101,8 @@ const mutations = {
     state.loginError = "Email and/or Password are invalid. Login failed.";
   },
   registerEnter(state, payload) {
-
     state.firstName = payload.firstName;
     state.lastName = payload.lastName;
-    state.password = payload.password;
-    state.email = payload.email;
     state.isRegister = true;
   },
   registerError(state) {
@@ -110,10 +111,18 @@ const mutations = {
   },
   updateAccessToken(state, token) {
     state.token = token;
-    
+
     if (token) {
       state.isLoggedIn = true;
     }
+  },
+  updateUserinfo(state, data) {
+    let updateData = data[0];
+    
+    state.firstName = updateData.firstName;
+    state.lastName = updateData.lastName;
+    state.password = updateData.password;
+    state.email = updateData.email;
   }
 };
 

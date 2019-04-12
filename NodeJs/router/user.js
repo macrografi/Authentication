@@ -10,8 +10,7 @@ router.get("/user/:id", (req, res) => {
   let findId = req.params.id;
 
   User.findById(findId)
-    .exec()
-    .then(docs => res.sendStatus(200).json({ message: docs }))
+    .then(docs => res.status(200).json(docs))
     .catch(err =>
       res.status(500).json({ message: "Error finding user id", error: err })
     );
@@ -23,7 +22,6 @@ router.get("/user/email/:email", (req, res) => {
 
   User.find(findEmail)
     .then(docs => res.status(200).json(docs))
-
     .catch(err =>
       res.status(500).json({ message: "Error finding user email", error: err })
     );
@@ -33,7 +31,6 @@ router.get("/user/email/:email", (req, res) => {
 router.post("/user/login", async (req, res) => {
   let data = req.body;
   let user = await User.findOne({ email: data.email, password: data.password });
-  
   if (!user || null) {
     return res.status(401).send({ message: "Email or password invalid" });
   }

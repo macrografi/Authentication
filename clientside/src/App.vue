@@ -3,12 +3,10 @@
     <b-navbar toggleable="lg" type="dark" variant="dark">
       <b-navbar-brand href="#">Auth.</b-navbar-brand>
       <b-navbar-toggle target="nav_collapse"/>
-
       <b-collapse is-nav id="nav_collapse">
         <b-navbar-nav>
           <b-nav-item router-link to="/">Home</b-nav-item>
           <b-nav-item router-link to="/about">About</b-nav-item>
-
           <b-nav-item v-if="!isLogin" router-link to="/login">
             <span class="clearfix">
               <i class="material-icons">face</i>
@@ -22,8 +20,8 @@
             <span>Register</span>
           </b-nav-item>
           <b-nav-item-dropdown v-if="isLogin" right>
-            <template slot="button-content">Welcome User</template>
-            <b-dropdown-item href="#">Profile</b-dropdown-item>
+            <template slot="button-content">Welcome {{autName}}</template>
+            <b-dropdown-item router-link to="/profile">Profile</b-dropdown-item>
             <b-dropdown-item href="#" @click="logout">Signout</b-dropdown-item>
           </b-nav-item-dropdown>
         </b-navbar-nav>
@@ -46,6 +44,10 @@ export default {
     },
     isLogin() {
       return this.$store.getters.isLoggedIn;
+    },
+    autName(){
+      // return this.$store.getters.firstName;
+      return this.$store.getters.email;
     }
   },
   methods: {
@@ -56,10 +58,11 @@ export default {
         }
       });
     },
-    ...mapActions(["fetchAccessToken"])
+    ...mapActions(["fetchAccessToken","updateUserinfo"])
   },
   created() {
     this.fetchAccessToken();
+    // this.updateUserinfo();
   }
 };
 </script>
